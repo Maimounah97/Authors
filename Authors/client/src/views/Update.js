@@ -35,7 +35,10 @@ const Update = (props) => {
     }, [])
     const updateAuthor = author => {
         axios.put('http://localhost:8000/api/authors/' + id, author)
-            .then(res => console.log(res))
+            .then(res => {
+                console.log(res)
+                history.push('/')
+            })
             .catch(err => {
                 const errorResponse = err.response.data.errors; // Get the errors from err.response.data
                 const errorArr = []; // Define a temp error array to push the messages in

@@ -27,6 +27,7 @@ const  AddAuthor = (props) => {
                 console.log("data from create api")
                 console.log(res.data)
                 setAuthors([...authors, res.data]);
+                history.push('/')
             })
             .catch(err=>{
                 const errorResponse = err.response.data.errors; // Get the errors from err.response.data
