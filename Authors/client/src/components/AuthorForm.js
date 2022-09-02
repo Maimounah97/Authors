@@ -12,7 +12,7 @@ export default props => {
     useEffect(() => {
         console.log("test from form component")
         console.log(initialName)
-        console.log(onSubmitProp)
+        // console.log(errors)
 
     }, [])
     const onSubmitHandler = e => {
@@ -24,7 +24,7 @@ export default props => {
         
     return (
         
-        <FormControl>
+        <FormControl  >
             <TextField id="outlined-basic" value={name}  label="name" variant="outlined" onChange={(e) => { setName(e.target.value) }}></TextField>
             <Button onClick={onSubmitHandler} variant="contained" type="submit" style={{margin:'5px'}}>Submit</Button>
             <Button variant="contained" onClick={()=>history.push("/")} style={{margin:'5px'}}>Cancel</Button>

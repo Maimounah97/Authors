@@ -12,6 +12,9 @@ const Update = (props) => {
     const [author, setAuthor] = useState();
     const [loaded, setLoaded] = useState(false);
     const [errors, setErrors] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    // const [data, setData] = useState({});
+
     const history = useHistory()
     useEffect(() => {
         axios.get('http://localhost:8000/api/authors/' + id)
@@ -19,7 +22,15 @@ const Update = (props) => {
                 console.log("from update")
                 console.log(res.data)
                 setAuthor(res.data);
+                // setData(res.data);
+                setLoading(false);
                 setLoaded(true);
+            })
+            .catch(err => {
+                setLoading(false);
+
+                console.log("We have an error");
+
             })
     }, [])
     const updateAuthor = author => {
@@ -38,21 +49,31 @@ const Update = (props) => {
 
     //In our return
 
-
+    if (isLoading) {
+        return <div>...Loading</div>;
+    }
+    // if (!loaded) {
+    //    return (<div style={{ paddingTop: '70px' }}>
+    //         <p>We're sorry, but we could not find the author you are looking for. Would you like to add this author to our database?</p>
+    //         <Link to={"/new"}>Click here to add a new author</Link>
+    //     </div>)
+    // }
     return (
         <div>
             <p><Link to={"/"}>Home</Link></p>
             <Paper>
                 <div style={{ width: '700px', height: '300px' }}>
+
+
                     {loaded && (
-                        (author.name == "CastError") ?
+                        (author == null || author.name == "CastError") ?
                             <div style={{ paddingTop: '70px' }}>
                                 <p>We're sorry, but we could not find the author you are looking for. Would you like to add this author to our database?</p>
                                 <Link to={"/new"}>Click here to add a new author</Link>
                             </div>
                             :
                             <div>
-                                <h3 style={{ marginBottom: '100px' }}>Edit this Author:</h3>
+                                <h3 style={{ marginBottom: '50px' }}>Edit this Author:</h3>
                                 {/* {author.name} */}
                                 {errors.map((err, index) => <p key={index}>{err}</p>)}
 
@@ -62,23 +83,19 @@ const Update = (props) => {
 
 
                     )}
+
+
+
+
+
+
                 </div>
             </Paper>
         </div>
 
-        // <div>
-        //     <h1>Add a new Author</h1>
-        //     {loaded && (
-        //         <div>
-        //         <AuthorForm
-        //             onSubmitProp={updateAuthor}
-        //             initialFirstName={author.name}
-        //         />
-        //         {/* <DeleteButton authorId={author._id} successCallback={() => history.push("/authors")} /> */}
-        //         </div>
-        //     )}
-        // </div>
     )
 }
 
+
 export default Update;
+

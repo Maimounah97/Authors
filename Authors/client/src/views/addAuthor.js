@@ -36,6 +36,8 @@ const  AddAuthor = (props) => {
                 }
                 // Set Errors
                 setErrors(errorArr);
+                
+
             })
     }
 
@@ -47,10 +49,10 @@ const  AddAuthor = (props) => {
             <p><Link to={"/"}>Home</Link></p>
         <Paper>
         <div style={{width:'700px', height:'300px'}}>
-            <h3 style={{marginBottom:'100px'}}>Add a new Author:</h3>
+            <h3 style={{marginBottom:'50px'}}>Add a new Author:</h3>
             {errors.map((err, index) => <p key={index}>{err}</p>)}
            
-                <AuthorForm onSubmitProp={createAuthor} initialName=""/>
+                <AuthorForm errors={errors} onSubmitProp={createAuthor} initialName=""/>
                 
            
         </div>
