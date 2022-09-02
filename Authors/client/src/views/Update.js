@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useHistory, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Paper } from "@mui/material"
 import AuthorForm from '../components/AuthorForm';
-import DeleteButton from '../components/DeleteButton';
+
+// import DeleteButton from '../components/DeleteButton';
 
 const Update = (props) => {
-    const { id } = props;
+    const { id } = useParams();
     const [author, setAuthor] = useState();
     const [loaded, setLoaded] = useState(false);
-    const history=useHistory()
+    const [errors, setErrors] = useState([]);
+    const history = useHistory()
     useEffect(() => {
         axios.get('http://localhost:8000/api/authors/' + id)
             .then(res => {
@@ -20,7 +24,16 @@ const Update = (props) => {
     }, [])
     const updateAuthor = author => {
         axios.put('http://localhost:8000/api/authors/' + id, author)
-            .then(res => console.log(res));
+            .then(res => console.log(res))
+            .catch(err => {
+                const errorResponse = err.response.data.errors; // Get the errors from err.response.data
+                const errorArr = []; // Define a temp error array to push the messages in
+                for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
+                    errorArr.push(errorResponse[key].message)
+                }
+                // Set Errors
+                setErrors(errorArr);
+            })
     }
 
     //In our return
@@ -28,17 +41,43 @@ const Update = (props) => {
 
     return (
         <div>
-            <h1>Update an Author</h1>
-            {loaded && (
-                <div>
-                <AuthorForm
-                    onSubmitProp={updateAuthor}
-                    initialFirstName={author.name}
-                />
-                <DeleteButton authorId={author._id} successCallback={() => history.push("/authors")} />
+            <p><Link to={"/"}>Home</Link></p>
+            <Paper>
+                <div style={{ width: '700px', height: '300px' }}>
+                    {loaded && (
+                        (author.name == "CastError") ?
+                            <div style={{ paddingTop: '70px' }}>
+                                <p>We're sorry, but we could not find the author you are looking for. Would you like to add this author to our database?</p>
+                                <Link to={"/new"}>Click here to add a new author</Link>
+                            </div>
+                            :
+                            <div>
+                                <h3 style={{ marginBottom: '100px' }}>Edit this Author:</h3>
+                                {/* {author.name} */}
+                                {errors.map((err, index) => <p key={index}>{err}</p>)}
+
+
+                                <AuthorForm onSubmitProp={updateAuthor} initialName={author.name} />
+                            </div>
+
+
+                    )}
                 </div>
-            )}
+            </Paper>
         </div>
+
+        // <div>
+        //     <h1>Add a new Author</h1>
+        //     {loaded && (
+        //         <div>
+        //         <AuthorForm
+        //             onSubmitProp={updateAuthor}
+        //             initialFirstName={author.name}
+        //         />
+        //         {/* <DeleteButton authorId={author._id} successCallback={() => history.push("/authors")} /> */}
+        //         </div>
+        //     )}
+        // </div>
     )
 }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios';
+import Button from '@mui/material/Button';
     
 export default props => {
     
@@ -14,9 +15,9 @@ export default props => {
     }
     
     return (
-        <button onClick={deleteAuthor}>
+        <Button variant="contained" onClick={deleteAuthor} color="secondary">
             Delete
-        </button>
+        </Button>
     )
 }
 

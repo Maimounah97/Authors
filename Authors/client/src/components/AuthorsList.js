@@ -1,16 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom";
+import { Button } from "@mui/material"
 import DeleteButton from './DeleteButton';
 
-import {
-    BrowserRouter,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 const AuthorList = (props) => {
     const [authors, setAuthors] = useState([]);
+    const history=useHistory();
     // const { authors, removeFromDom } = props;
 
     useEffect(() => {
@@ -25,9 +22,31 @@ const AuthorList = (props) => {
         setAuthors(authors.filter(author => author._id != authorId))
     }
     return (
-        <div>
-            <h2>All Authors:</h2>
-            {props.authors.map((author, i) =>
+        <div style={{width:'500px'}}>
+            <h5>We have quotes by:</h5>
+            <table style={{marginTop:'50px'}} className="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Author</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {props.authors.map((author, i) =>
+
+                        <tr key={i}>
+                            <td>{author.name}</td>
+                            <td>
+                                <Button variant="contained" onClick={()=>history.push("/author/"+author._id+"/edit")} style={{margin:'5px'}}>Edit</Button>
+                                <DeleteButton authorId={author._id} successCallback={()=>removeFromDom(author._id)}/></td>
+                        </tr>
+
+
+                    )}
+                </tbody>
+            </table>
+
+            {/* {props.authors.map((author, i) =>
                 <div key={i}> <Link to={"/author/" + author._id + "/edit"}>
                     {author.name}
                 </Link>
@@ -35,7 +54,7 @@ const AuthorList = (props) => {
                 </div>
 
 
-            )}
+            )} */}
         </div>
     )
 }
